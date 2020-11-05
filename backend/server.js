@@ -3,6 +3,7 @@ import env from 'dotenv';
 import connectDb from './config/db.js';
 import colors from 'colors';
 import productRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 env.config();
@@ -14,6 +15,7 @@ app.use(express.json());
 connectDb();
 
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(notFound);
 

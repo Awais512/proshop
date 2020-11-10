@@ -17,6 +17,9 @@ import {
   USER_REMOVE_FAIL,
   USER_REMOVE_REQUEST,
   USER_REMOVE_SUCCESS,
+  USER_UPDATE_ADMIN_FAIL,
+  USER_UPDATE_ADMIN_REQUEST,
+  USER_UPDATE_ADMIN_SUCCESS,
   USER_UPDATE_FAIL,
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
@@ -190,6 +193,34 @@ export const removeUser = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_REMOVE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_UPDATE_ADMIN_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await Axios.put(`/api/users/${user._id}`, user, config);
+
+    dispatch({ type: USER_UPDATE_ADMIN_SUCCESS });
+    dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_ADMIN_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

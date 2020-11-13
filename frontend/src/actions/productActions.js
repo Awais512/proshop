@@ -20,10 +20,10 @@ import {
 } from '../constants/productConstants';
 import Axios from 'axios';
 
-export const listProducts = () => async (dispatch) => {
+export const listProducts = (keyword = '') => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST });
-    const { data } = await Axios.get('/api/products');
+    const { data } = await Axios.get(`/api/products?keyword=${keyword}`);
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
